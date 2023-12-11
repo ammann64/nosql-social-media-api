@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/ammann64/nosql-social-media-api#readme",
   "dependencies": {
+    "dayjs": "^1.11.10",
     "express": "^4.18.2",
     "mongoose": "^8.0.3"
   },
