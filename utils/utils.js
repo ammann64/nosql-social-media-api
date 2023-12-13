@@ -1,4 +1,4 @@
-const dayjs = require(dayjs);
+const dayjs = require('dayjs');
 
 function formatDate(date) {
     dateFormatted = dayjs(date).format('DD-MM-YYYY');

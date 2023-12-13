@@ -1,3 +1,5 @@
+const dayjs = require('dayjs');
+
 const names = [
     'Aaron',
     'Alexander',
@@ -76,11 +78,11 @@ const names = [
     'Zidane',
 ];
 
-const thoughts = [
+const thoughtTexts = [
     'I am hungry',
     'I am thirsty',
     'I am bored',
-    'Game of thrones is a cool show',
+    'Game of Thrones is a cool show',
     'No good movies out recently...',
     'Aliens are real',
     'Space is so cool',
@@ -112,10 +114,45 @@ const thoughts = [
     'Forgot the password to my email...'
 ];
 
+const reactionBodies = [
+    'That\'s good!',
+    'That sucks...',
+    'Wow!',
+    'Uh oh!',
+    'Great!',
+    'That\'s awful!',
+    'Okay?',
+    'That\'s great!',
+    'Oh no...',
+    'Okay.',
+    'Okay...',
+    'Great...'
+];
+
+const emailDomains = [
+    'gmail.com',
+    'bing.com',
+    'hotmail.com',
+    'aol.com',
+    'yahoo.com',
+    'mail.com',
+    'outlook.com'
+]
+
 const getRandomArrItem = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
-const getRandomNumber = () =>
-    Math.floor(Math.random() * 100)
+const getRandomArrItems = (num, arr) => {
+    const results = [];
+    for (let n = 0; n < num; n++) {
+        results.push(getRandomArrItem(arr));
+    }
+    return results;
+}
+const getRandomNumber = () => Math.floor(Math.random() * 100);
 
-const getRandomUsername = () =>
-    `${getRandomArrItem(names)}${getRandomNumber}`;
+const getRandomUsername = () => `${getRandomArrItem(names)}${getRandomNumber()}`;
+
+const getRandomEmail = (username) => `${username}@${getRandomArrItem(emailDomains)}`;
+
+
+module.exports = {thoughtTexts, reactionBodies, getRandomArrItem, getRandomArrItems, getRandomEmail, getRandomUsername};
