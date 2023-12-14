@@ -1,5 +1,6 @@
 const express = require('express');
 const db = require('./config/connection');
+const { User, Thought } = require('./models');
 const routes = require('./routes');
 
 const PORT = process.env.PORT || 3001;
@@ -11,6 +12,6 @@ app.use(routes);
 
 db.once('open', () => {
     app.listen(PORT, () => {
-        console.log(`API server for ${activity} running on port ${PORT}!`);
+        console.log(`API server for NoSQL Social Media App running on port ${PORT}!`);
     });
 });

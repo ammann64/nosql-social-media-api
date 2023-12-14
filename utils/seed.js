@@ -5,7 +5,7 @@ const { thoughtTexts, reactionBodies, getRandomArrItem, getRandomArrItems, getRa
 connection.on('error', (err) => err);
 
 connection.once('open', async () => {
-    // console.log('connected');
+    console.log('connected');
     //Drop the collections if they already exist
     let userCheck = await connection.db.listCollections({ name: 'users' }).toArray();
     if (userCheck.length) {
@@ -93,12 +93,17 @@ connection.once('open', async () => {
         for (x = 0; x < friendCount; x++) {
             let friendName = friendNames[x];
             let friendObject = await User.findOne({ username: friendName}).exec();
-            console.log(friendObject);
-            console.log(friendObject._id);
+            // console.log(friendObject);
+            // console.log(friendObject._id);
             let friend = friendObject._id;
             friends.push(friend);
         }
         user.friends = friends;
         await user.save();
     }
+
+    console.table(users);
+    console.table(thoughts);
+    console.info('Seeding complete!');
+    process.exit(0);
 });
