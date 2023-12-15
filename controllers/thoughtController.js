@@ -12,7 +12,7 @@ module.exports = {
 
     async getSingleThought(req, res) {
         try {
-            const thought = await Thought.findOne({ _id: req.params.userId});
+            const thought = await Thought.findOne({ _id: req.params.thoughtId});
 
             if (!thought) {
                 return res.status(404).json({ message: 'No thought with that ID'});
@@ -28,35 +28,38 @@ module.exports = {
         try {
             const thought = await Thought.create(req.body);
             const username = req.body.username;
-            if (username) {
-                user = User.findOneAndUpdate(
-                    { username: username}, { $addToSet: { thoughts: thought._id } }
-                    );
-            }
-            else {
-                return res.status(404).json({ message: 'Invalid username!' });
-            }
+            console.log(thought._id);
+            user = User.findOneAndUpdate(
+            { username: username}, { $addToSet: { thoughts: thought._id } }
+            );
+            res.status(200).json(thought);
         } catch (err) {
             res.status(500).json(err);
+            console.log(err);
         }
     },
 
     async updateThought (req, res) {
         try {
+            thoughtText = req.body.thoughtText;
+            username = req.body.username;
             const thought = await Thought.findByIdAndUpdate(
-                req.params.thoughtId, {thoughtText: req.body.thoughtText, username: req.body.username}
+                req.params.thoughtId, {thoughtText: thoughtText, username: username},
+                {new: true}
                 );
-            res.status(200).json({ message: "Sucessfully updated user!"});
+            res.status(200).json(thought);
         } catch (err) {
             res.status(500).json(err);
+            console.log(err);
         }
     },
 
     async deleteThought (req, res) {
         try {
-            const thought = await Thought.findByIdAndDelete(req.params.thoughtId)
+            thoughtId = req.params.thoughtId
+            const thought = await Thought.findByIdAndDelete(thoughtId);
 
-            res.status(200).json({ message: "Successfully deleted a user!"});
+            res.status(200).json({ message: "Successfully deleted a thought!"});
         } catch (err) {
             res.status(500).json(err);
         }
@@ -65,10 +68,11 @@ module.exports = {
     async addReaction (req, res) {
         try {
             const thought = Thought.findByIdAndUpdate(
-                req.params.thoughtId, { $addToSet: { reactions: {reactionBody: req.body.reactionBody, username: req.body.username} } }
-                );
+                { _id: req.params.thoughtId }, { $addToSet: { reactions: {reactionBody: req.body.reactionBody, username: req.body.username} } },
+                {runValidators: true, new: true}
+            );
             
-            res.status(200).json({ message: 'Successfully added a reaction!'});
+            res.status(200).json({ message: 'Successfully added a reaction'});
         } catch (err) {
             res.status(500).json(err);
             console.log(err);
@@ -78,10 +82,11 @@ module.exports = {
     async removeReaction (req, res) {
         try {
             const thought = User.findByIdAndUpdate(
-                req.params.thoughtId, { $pull: { reactions: req.body.reactionId } }
+                { _id: req.params.thoughtId }, { $pull: { reactions: req.body.reactionId } },
+                {runValidators: true, new: true}
             );
 
-            res.status(200).json({ message: 'Successfully removed a friend!'});
+            res.status(200).json({ message: 'Successfully removed a reaction'});
         } catch (err) {
             res.status(500).json(err);
             console.log(err);
